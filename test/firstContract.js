@@ -3,11 +3,12 @@ const { expect } = require("chai");
 
 describe("FirstContract", function () {
   async function deployContractFixture() {
+    const LENDER_COUNT = 5;
     const [owner, account2] = await ethers.getSigners();
     const FirstContract = await ethers.getContractFactory("FirstContract");
-    const contract = await FirstContract.deploy();
+    const contract = await FirstContract.deploy(LENDER_COUNT);
 
-    return { owner, contract, account2 };
+    return { owner, contract, account2, lenderCount: LENDER_COUNT};
   }
 
   describe("Deployment", function () {
@@ -33,6 +34,14 @@ describe("FirstContract", function () {
       await expect(contract.connect(account2).addLender())
         .to.be.revertedWith("Only owner can add lender");
     });
+  });
+
+  it("should increase lender index", async function () {
+    const { contract, lenderCount } = await loadFixture(deployContractFixture);
+
+    await contract.addLender();
+
+    expect(await contract.NftLenderIndex()).to.equal(lenderCount + 1);
   });
 
     it("Should add a lender", async function () {
