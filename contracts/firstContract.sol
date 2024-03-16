@@ -24,7 +24,7 @@ contract FirstContract {
     // checks if the lending index is valid or not and if it is already owned
     function issueLendingNft(uint lendingIdx) public {
         require(lendingIdx < NftLenderIndex, "Invalid lending index");
-        require(lendingNftToAddress[lendingIdx] == address(0) , "NFT already owned");
+        require(lendingNftToAddress[lendingIdx] == address(0) , "Lending NFT already owned");
 
         lendingNftToAddress[lendingIdx] = msg.sender;
         NftLenderIndexMappingAddress [msg.sender].push(lendingIdx);

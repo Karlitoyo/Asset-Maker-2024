@@ -8,7 +8,7 @@ describe("FirstContract", function () {
     const FirstContract = await ethers.getContractFactory("FirstContract");
     const contract = await FirstContract.deploy(LENDER_COUNT);
 
-    return { owner, contract, account2, lenderCount: LENDER_COUNT};
+    return { owner, contract, account2, lenderCount: LENDER_COUNT };
   }
 
   describe("Deployment", function () {
@@ -31,8 +31,9 @@ describe("FirstContract", function () {
     it("Should revert with correct error in case of other account", async function () {
       const { contract, account2 } = await loadFixture(deployContractFixture);
 
-      await expect(contract.connect(account2).addLender())
-        .to.be.revertedWith("Only owner can add lender");
+      await expect(contract.connect(account2).addLender()).to.be.revertedWith(
+        "Only owner can add lender"
+      );
     });
   });
 
@@ -44,8 +45,18 @@ describe("FirstContract", function () {
     expect(await contract.NftLenderIndex()).to.equal(lenderCount + 1);
   });
 
-    it("Should add a lender", async function () {
-      const { owner, contract } = await loadFixture(deployContractFixture);
-      const lender = "0x";
+  it("Should add a lender", async function () {
+    const { owner, contract } = await loadFixture(deployContractFixture);
+    const lender = "0x";
+  });
+
+  describe("Issue Lending NFT", function () {
+    it("Should revert with index out of bounds", async function () {
+      const { contract, lenderCount } = await loadFixture(deployContractFixture);
+
+      await expect(contract.issueLendingNft(lenderCount)).to.be.revertedWith(
+        "Invalid lending index"
+      );
     });
+  });
 });
