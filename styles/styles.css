@@ -1,0 +1,47 @@
+.header {
+    background: linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 1) 50%,
+      rgba(255, 255, 255, 1) 100%
+    );
+    height: 400px;
+    clip-path: polygon(0% 0, 100% 0, 100% 70%, 0 100%);
+  }
+  
+  .container {
+    display: flex;
+  }
+  .container > div {
+    flex: 1; /*grow*/
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .pepe {
+    float: right;
+  }
+  
+  .main-page-content {
+    padding: 0px 60px;
+  }
+  
+  .mainPageSection {
+    margin-top: -120px;
+    height: 400px;
+    background: white;
+  }
+  
+  .navbar-end {
+    margin-right: 50px;
+  }
+  
+  .box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 50px 40px
+  }
+  
+  .mid-lend-page {
+    padding: 50px 0px;
+  }
