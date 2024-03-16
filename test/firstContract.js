@@ -4,11 +4,15 @@ const { expect } = require("chai");
 describe("FirstContract", function () {
   async function deployContractFixture() {
     const LENDER_COUNT = 5;
-    const [owner, account2] = await ethers.getSigners();
+    const LENDING_NFT_IDX = 0;
+
+    const [owner, account2, account3] = await ethers.getSigners();
     const FirstContract = await ethers.getContractFactory("FirstContract");
     const contract = await FirstContract.deploy(LENDER_COUNT);
 
-    return { owner, contract, account2, lenderCount: LENDER_COUNT };
+    await contract.connect(account3).issueLendingNft(LENDING_NFT_IDX);
+
+    return { owner, account2, account3, contract, lenderCount: LENDER_COUNT, lendingNftIdx: LENDING_NFT_IDX };
   }
 
   describe("Deployment", function () {
@@ -52,10 +56,26 @@ describe("FirstContract", function () {
 
   describe("Issue Lending NFT", function () {
     it("Should revert with index out of bounds", async function () {
-      const { contract, lenderCount } = await loadFixture(deployContractFixture);
+      const { contract, lenderCount } = await loadFixture(
+        deployContractFixture
+      );
 
       await expect(contract.issueLendingNft(lenderCount)).to.be.revertedWith(
         "Invalid lending index"
+      );
+
+      await expect(contract.issueLendingNft(-1)).to.be.rejectedWith(
+        "value out-of-bounds"
+      );
+    });
+
+    it("Should revert with lender already allocated", async function () {
+      const { contract, lendingNftIdx } = await loadFixture(
+        deployContractFixture
+      );
+
+      await expect(contract.issueLendingNft(lendingNftIdx)).to.be.revertedWith(
+        "Lending NFT already owned"
       );
     });
   });
